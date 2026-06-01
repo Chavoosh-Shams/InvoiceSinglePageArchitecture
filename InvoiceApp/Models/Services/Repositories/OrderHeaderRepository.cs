@@ -217,7 +217,6 @@ namespace InvoiceApp.Models.Services.Repositories
             {
                 var orderHeaders = await _context.OrderHeaders
                     .AsNoTracking()
-                    .Include(oh => oh.OrderDetails)
                     .Include(oh => oh.Customer)
                     .ToListAsync();
                 return new Response<IEnumerable<OrderHeader>>(
