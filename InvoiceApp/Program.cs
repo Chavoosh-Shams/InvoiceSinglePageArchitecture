@@ -1,11 +1,20 @@
 using InvoiceApp.Models;
 using Microsoft.EntityFrameworkCore;
+using InvoiceApp.Models.Services.Contracts;
+using InvoiceApp.Models.Services.Repositories;
+using InvoiceApp.ApplicationServices.Services;
+using InvoiceApp.ApplicationServices.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 #region [- AddDbContext() -]
 var connectionString = builder.Configuration.GetConnectionString("Default");
-builder.Services.AddDbContext<ProjectDbContext>(options => options.UseSqlServer(connectionString)); 
+builder.Services.AddDbContext<ProjectDbContext>(options => options.UseSqlServer(connectionString));
+#endregion
+
+#region [- AddScoped() -]
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerApplicationService, CustomerApplicationService>(); 
 #endregion
 
 // Add services to the container.
