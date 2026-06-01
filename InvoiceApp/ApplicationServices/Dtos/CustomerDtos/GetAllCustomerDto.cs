@@ -1,6 +1,6 @@
 ﻿namespace InvoiceApp.ApplicationServices.Dtos.CustomerDtos
 {
-    public class PostCustomerDto
+    public class GetAllCustomerDto
     {
         public Guid CustomerID { get; set; }
         public string FirstName { get; set; }

@@ -14,7 +14,10 @@ builder.Services.AddDbContext<ProjectDbContext>(options => options.UseSqlServer(
 
 #region [- AddScoped() -]
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<ICustomerApplicationService, CustomerApplicationService>(); 
+builder.Services.AddScoped<ICustomerApplicationService, CustomerApplicationService>();
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
 #endregion
 
 // Add services to the container.

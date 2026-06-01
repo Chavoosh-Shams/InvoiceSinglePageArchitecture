@@ -1,34 +1,35 @@
 ﻿using System.Net;
 using InvoiceApp.Models.Services.Contracts;
 using InvoiceApp.Frameworks.ResponseFrameworks;
-using InvoiceApp.ApplicationServices.Dtos.CustomerDtos;
-using InvoiceApp.Models.DomainModels.CustomerAggregates;
+using InvoiceApp.ApplicationServices.Dtos.ProductDtos;
+using InvoiceApp.Models.DomainModels.ProductAggregates;
 using InvoiceApp.ApplicationServices.Services.Contracts;
 using InvoiceApp.Frameworks.ResponseFrameworks.Contracts;
 
 namespace InvoiceApp.ApplicationServices.Services
 {
-    public class CustomerApplicationService : ICustomerApplicationService
+    public class ProductApplicationService : IProductApplicationService
     {
-        #region [- PrivateField -]
-        private readonly ICustomerRepository _customerRepository;
+
+        #region [- PrivateFields -]
+        private readonly IProductRepository _productRepository;
         #endregion
 
         #region [- Ctor -]
-        public CustomerApplicationService(ICustomerRepository customerRepository)
+        public ProductApplicationService(IProductRepository productRepository)
         {
-            _customerRepository = customerRepository;
+            _productRepository = productRepository;
         }
         #endregion
 
         #region [- PostAsync() -]
-        public async Task<IResponse<PostCustomerDto>> PostAsync(PostCustomerDto postCustomerDto)
+        public async Task<IResponse<PostProductDto>> PostAsync(PostProductDto postProductDto)
         {
             try
             {
-                if (postCustomerDto == null)
+                if (postProductDto == null)
                 {
-                    return new Response<PostCustomerDto>(
+                    return new Response<PostProductDto>(
                         false,
                         HttpStatusCode.BadRequest,
                         ResponseMessages.Error,
@@ -37,19 +38,16 @@ namespace InvoiceApp.ApplicationServices.Services
                 }
                 else
                 {
-                    var customer = new Customer()
+                    var product = new Product()
                     {
-                        CustomerID = postCustomerDto.CustomerID,
-                        FirstName = postCustomerDto.FirstName,
-                        LastName = postCustomerDto.LastName,
-                        Phone = postCustomerDto.Phone,
-                        City = postCustomerDto.City,
-                        Address = postCustomerDto.Address,
+                        ProductID = postProductDto.ProductID,
+                        ProductName = postProductDto.ProductName,
+                        UnitPrice = postProductDto.UnitPrice,
                     };
-                    var result = await _customerRepository.InsertAsync(customer);
+                    var result = await _productRepository.InsertAsync(product);
                     if (!result.IsSuccessful)
                     {
-                        return new Response<PostCustomerDto>(
+                        return new Response<PostProductDto>(
                             false,
                             HttpStatusCode.InternalServerError,
                             ResponseMessages.Error,
@@ -57,18 +55,18 @@ namespace InvoiceApp.ApplicationServices.Services
                     }
                     else
                     {
-                        return new Response<PostCustomerDto>(
+                        return new Response<PostProductDto>(
                            true,
                            HttpStatusCode.Created,
                            ResponseMessages.SuccessfullOperation,
-                           postCustomerDto);
+                           postProductDto);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new Response<PostCustomerDto>(
+                return new Response<PostProductDto>(
                     false,
                     HttpStatusCode.InternalServerError,
                     ResponseMessages.Error,
@@ -78,13 +76,13 @@ namespace InvoiceApp.ApplicationServices.Services
         #endregion
 
         #region [- PutAsync() -]
-        public async Task<IResponse<PutCustomerDto>> PutAsync(PutCustomerDto putCustomerDto)
+        public async Task<IResponse<PutProductDto>> PutAsync(PutProductDto putProductDto)
         {
             try
             {
-                if (putCustomerDto == null)
+                if (putProductDto == null)
                 {
-                    return new Response<PutCustomerDto>(
+                    return new Response<PutProductDto>(
                         false,
                         HttpStatusCode.BadRequest,
                         ResponseMessages.Error,
@@ -93,19 +91,16 @@ namespace InvoiceApp.ApplicationServices.Services
                 }
                 else
                 {
-                    var customer = new Customer()
+                    var product = new Product()
                     {
-                        CustomerID = putCustomerDto.CustomerID,
-                        FirstName = putCustomerDto.FirstName,
-                        LastName = putCustomerDto.LastName,
-                        Phone = putCustomerDto.Phone,
-                        City = putCustomerDto.City,
-                        Address = putCustomerDto.Address,
+                        ProductID = putProductDto.ProductID,
+                        ProductName = putProductDto.ProductName,
+                        UnitPrice = putProductDto.UnitPrice,
                     };
-                    var result = await _customerRepository.UpdateAsync(customer);
+                    var result = await _productRepository.UpdateAsync(product);
                     if (!result.IsSuccessful)
                     {
-                        return new Response<PutCustomerDto>(
+                        return new Response<PutProductDto>(
                             false,
                             HttpStatusCode.InternalServerError,
                             ResponseMessages.Error,
@@ -113,18 +108,18 @@ namespace InvoiceApp.ApplicationServices.Services
                     }
                     else
                     {
-                        return new Response<PutCustomerDto>(
+                        return new Response<PutProductDto>(
                            true,
                            HttpStatusCode.OK,
                            ResponseMessages.SuccessfullOperation,
-                           putCustomerDto);
+                           putProductDto);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new Response<PutCustomerDto>(
+                return new Response<PutProductDto>(
                     false,
                     HttpStatusCode.InternalServerError,
                     ResponseMessages.Error,
@@ -134,13 +129,13 @@ namespace InvoiceApp.ApplicationServices.Services
         #endregion
 
         #region [- DeleteAsync() -]
-        public async Task<IResponse<DeleteCustomerDto>> DeleteAsync(DeleteCustomerDto deleteCustomerDto)
+        public async Task<IResponse<DeleteProductDto>> DeleteAsync(DeleteProductDto deleteProductDto)
         {
             try
             {
-                if (deleteCustomerDto == null)
+                if (deleteProductDto == null)
                 {
-                    return new Response<DeleteCustomerDto>(
+                    return new Response<DeleteProductDto>(
                         false,
                         HttpStatusCode.BadRequest,
                         ResponseMessages.Error,
@@ -149,39 +144,35 @@ namespace InvoiceApp.ApplicationServices.Services
                 }
                 else
                 {
-                    var customer = new Customer()
+                    var product = new Product()
                     {
-                        CustomerID = deleteCustomerDto.CustomerID,
-                        FirstName = deleteCustomerDto.FirstName,
-                        LastName = deleteCustomerDto.LastName,
-                        Phone = deleteCustomerDto.Phone,
-                        City = deleteCustomerDto.City,
-                        Address = deleteCustomerDto.Address,
+                        ProductID = deleteProductDto.ProductID,
+                        ProductName = deleteProductDto.ProductName,
+                        UnitPrice = deleteProductDto.UnitPrice,
                     };
-                    var result = await _customerRepository.DeleteAsync(customer);
+                    var result = await _productRepository.DeleteAsync(product);
                     if (!result.IsSuccessful)
                     {
-                        return new Response<DeleteCustomerDto>(
+                        return new Response<DeleteProductDto>(
                             false,
-                            HttpStatusCode.NotFound,
-                            ResponseMessages.NullInput,
+                            HttpStatusCode.InternalServerError,
+                            ResponseMessages.Error,
                             null);
                     }
                     else
                     {
-                        return new Response<DeleteCustomerDto>(
+                        return new Response<DeleteProductDto>(
                            true,
                            HttpStatusCode.OK,
                            ResponseMessages.SuccessfullOperation,
-                           deleteCustomerDto
-                           );
+                           deleteProductDto);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new Response<DeleteCustomerDto>(
+                return new Response<DeleteProductDto>(
                     false,
                     HttpStatusCode.InternalServerError,
                     ResponseMessages.Error,
@@ -191,13 +182,13 @@ namespace InvoiceApp.ApplicationServices.Services
         #endregion
 
         #region [- GetByIdAsync() -]
-        public async Task<IResponse<GetCustomerByIdDto>> GetByIdAsync(GetCustomerByIdDto getCustomerByIdDto)
+        public async Task<IResponse<GetProductByIdDto>> GetByIdAsync(GetProductByIdDto getProductByIdDto)
         {
             try
             {
-                if (getCustomerByIdDto == null)
+                if (getProductByIdDto == null)
                 {
-                    return new Response<GetCustomerByIdDto>(
+                    return new Response<GetProductByIdDto>(
                         false,
                         HttpStatusCode.BadRequest,
                         ResponseMessages.Error,
@@ -206,19 +197,16 @@ namespace InvoiceApp.ApplicationServices.Services
                 }
                 else
                 {
-                    var customer = new Customer()
+                    var product = new Product()
                     {
-                        CustomerID = getCustomerByIdDto.CustomerID,
-                        FirstName = getCustomerByIdDto.FirstName,
-                        LastName = getCustomerByIdDto.LastName,
-                        Phone = getCustomerByIdDto.Phone,
-                        City = getCustomerByIdDto.City,
-                        Address = getCustomerByIdDto.Address,
+                        ProductID = getProductByIdDto.ProductID,
+                        ProductName = getProductByIdDto.ProductName,
+                        UnitPrice = getProductByIdDto.UnitPrice,
                     };
-                    var customerDto = await _customerRepository.SelectByIdAsync(customer);
-                    if (!customerDto.IsSuccessful || customerDto.Value == null)
+                    var productDto = await _productRepository.SelectByIdAsync(product);
+                    if (!productDto.IsSuccessful || productDto.Value == null)
                     {
-                        return new Response<GetCustomerByIdDto>(
+                        return new Response<GetProductByIdDto>(
                             false,
                             HttpStatusCode.NotFound,
                             ResponseMessages.NullInput,
@@ -226,27 +214,24 @@ namespace InvoiceApp.ApplicationServices.Services
                     }
                     else
                     {
-                        var responseDto = new GetCustomerByIdDto()
+                        var responseDto = new GetProductByIdDto()
                         {
-                            CustomerID = customerDto.Value.CustomerID,
-                            FirstName = customerDto.Value.FirstName,
-                            LastName = customerDto.Value.LastName,
-                            Phone = customerDto.Value.Phone,
-                            City = customerDto.Value.City,
-                            Address = customerDto.Value.Address,
+                            ProductID = productDto.Value.ProductID,
+                            ProductName = productDto.Value.ProductName,
+                            UnitPrice = productDto.Value.UnitPrice,
                         };
-                        return new Response<GetCustomerByIdDto>(
-                           true,
-                           HttpStatusCode.OK,
-                           ResponseMessages.SuccessfullOperation,
-                           responseDto);
+                        return new Response<GetProductByIdDto>(
+                          true,
+                          HttpStatusCode.OK,
+                          ResponseMessages.SuccessfullOperation,
+                          responseDto);
                     }
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new Response<GetCustomerByIdDto>(
+                return new Response<GetProductByIdDto>(
                     false,
                     HttpStatusCode.InternalServerError,
                     ResponseMessages.Error,
@@ -256,14 +241,14 @@ namespace InvoiceApp.ApplicationServices.Services
         #endregion
 
         #region [- GetAllAsync() -]
-        public async Task<IResponse<List<GetAllCustomerDto>>> GetAllAsync()
+        public async Task<IResponse<List<GetAllProductDto>>> GetAllAsync()
         {
             try
             {
-                var customers = await _customerRepository.SelectAllAsync();
-                if (!customers.IsSuccessful || customers.Value == null)
+                var products = await _productRepository.SelectAllAsync();
+                if (!products.IsSuccessful || products.Value == null)
                 {
-                    return new Response<List<GetAllCustomerDto>>(
+                    return new Response<List<GetAllProductDto>>(
                         false,
                         HttpStatusCode.NotFound,
                         ResponseMessages.NullInput,
@@ -271,16 +256,13 @@ namespace InvoiceApp.ApplicationServices.Services
                 }
                 else
                 {
-                    var result = customers.Value.Select(customer => new GetAllCustomerDto()
+                    var result = products.Value.Select(p => new GetAllProductDto()
                     {
-                        CustomerID = customer.CustomerID,
-                        FirstName = customer.FirstName,
-                        LastName = customer.LastName,
-                        Phone = customer.Phone,
-                        City = customer.City,
-                        Address = customer.Address,
+                        ProductID = p.ProductID,
+                        ProductName = p.ProductName,
+                        UnitPrice = p.UnitPrice,
                     }).ToList();
-                    return new Response<List<GetAllCustomerDto>>(
+                    return new Response<List<GetAllProductDto>>(
                         true,
                         HttpStatusCode.OK,
                         ResponseMessages.SuccessfullOperation,
@@ -291,7 +273,7 @@ namespace InvoiceApp.ApplicationServices.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
-                return new Response<List<GetAllCustomerDto>>(
+                return new Response<List<GetAllProductDto>> (
                     false,
                     HttpStatusCode.InternalServerError,
                     ResponseMessages.Error,
@@ -299,5 +281,6 @@ namespace InvoiceApp.ApplicationServices.Services
             }
         } 
         #endregion
+
     }
 }
