@@ -18,6 +18,8 @@ builder.Services.AddScoped<ICustomerApplicationService, CustomerApplicationServi
 
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IProductApplicationService, ProductApplicationService>();
+
+builder.Services.AddScoped<IOrderHeaderRepository, OrderHeaderRepository>();
 #endregion
 
 // Add services to the container.
