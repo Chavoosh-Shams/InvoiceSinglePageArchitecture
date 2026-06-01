@@ -173,7 +173,8 @@ namespace InvoiceApp.Models.Services.Repositories
                 }
                 else
                 {
-                    var existingOrderHeader = await _context.OrderHeaders.AsNoTracking()
+                    var existingOrderHeader = await _context.OrderHeaders
+                        .AsNoTracking()
                         .Include(oh => oh.OrderDetails)
                         .ThenInclude(od => od.Product)
                         .Include(oh => oh.Customer)
