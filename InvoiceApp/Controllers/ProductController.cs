@@ -1,8 +1,6 @@
-﻿
+﻿using Microsoft.AspNetCore.Mvc;
 using InvoiceApp.ApplicationServices.Dtos.ProductDtos;
-
 using InvoiceApp.ApplicationServices.Services.Contracts;
-using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers
 {
