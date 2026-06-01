@@ -37,7 +37,6 @@ let selectedId = null;
 // Base URL for AJAX Fetch Requests
 const baseUrl = "http://localhost:5013/Customer";
 
-
 // Ajax : Fetch All Customers 
 const fetchCustomers = async () => {
 
@@ -55,7 +54,6 @@ const fetchCustomers = async () => {
 
     }
 }
-
 
 // Render Last Three Customers
 const showCustomers = customers => {
@@ -87,7 +85,6 @@ const showCustomers = customers => {
 
     })
 }
-
 
 // Ajax : Create 
 const create = async () => {
@@ -147,7 +144,6 @@ const create = async () => {
 
 }
 
-
 // Ajax : Update
 const update = async () => {
 
@@ -200,7 +196,7 @@ const update = async () => {
 
 }
 
-
+// Ajax : Remove
 const remove = async () => {
 
     try {
@@ -229,8 +225,7 @@ const remove = async () => {
     }
 };
 
-
-// Ajax : Get Detail Of Person
+// Ajax : Get By Id
 const showDetail = async (customerID) => {
 
     try {
@@ -252,14 +247,12 @@ const showDetail = async (customerID) => {
 
 }
 
-
-// Functions: Save Person ID for Edit or Remove
+// Functions: Save ID for Edit or Remove
 const setId = Id => {
     selectedId = Id;
 }
 
-
-// Functions: Populate Update Modal Inputs and Store Selected Person ID
+// Functions: Populate Update Modal Inputs and Store Selected ID
 const populateUpdateModal = (customerId, firstName, lastName, phone, city, address) => {
     setId(customerId);
     firstNameUpdateModalInput.value = firstName;
@@ -269,7 +262,6 @@ const populateUpdateModal = (customerId, firstName, lastName, phone, city, addre
     addressUpdateModalInput.value = address;
 }
 
-
 // Functions: Clear Form Inputs 
 const inputCleaner = () => {
     firstNameInput.value = "";
@@ -278,7 +270,6 @@ const inputCleaner = () => {
     cityInput.value = "";
     addressInput.value = "";
 }
-
 
 // Validation
 const validationInput = (firstName, lastName, phone, city, address) => {
@@ -347,8 +338,7 @@ const validationInput = (firstName, lastName, phone, city, address) => {
     return {
         isValid: true
     };
-};
-
+}
 
 // Event Listeners
 window.addEventListener("load", fetchCustomers);
