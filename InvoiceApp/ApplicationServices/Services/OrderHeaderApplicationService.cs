@@ -227,7 +227,11 @@ namespace InvoiceApp.ApplicationServices.Services
                 {
                     var orderHeader = new OrderHeader()
                     {
-                        OrderHeaderID = getOrderHeaderByIdDto.OrderHeaderID
+                        OrderHeaderID = getOrderHeaderByIdDto.OrderHeaderID,
+                        CustomerID = getOrderHeaderByIdDto.CustomerID,
+                        OrderDate = getOrderHeaderByIdDto.OrderDate,
+                        ShipCity = getOrderHeaderByIdDto.ShipCity,
+                        ShipAddress = getOrderHeaderByIdDto.ShipAddress
                     };
                     var customerDto = await _orderHeaderRepository.SelectByIdAsync(orderHeader);
                     if (!customerDto.IsSuccessful || customerDto.Value == null)

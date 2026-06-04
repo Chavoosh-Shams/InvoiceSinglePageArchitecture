@@ -6,6 +6,7 @@ namespace InvoiceApp.Controllers
 {
     public class ProductController : Controller
     {
+
         #region [- PrivateField -]
         private readonly IProductApplicationService _productApplicationService;
         #endregion
@@ -36,7 +37,9 @@ namespace InvoiceApp.Controllers
             if (!result.IsSuccessful)
                 return BadRequest(result.Message);
 
-            return Ok(result.Value);
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
 
@@ -52,7 +55,9 @@ namespace InvoiceApp.Controllers
             if (!result.IsSuccessful)
                 return BadRequest(result.Message);
 
-            return Ok(result.Value);
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
 
@@ -70,7 +75,9 @@ namespace InvoiceApp.Controllers
             if (!result.IsSuccessful)
                 return BadRequest(result.Message);
 
-            return Ok(result.Value);
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
 
@@ -82,12 +89,12 @@ namespace InvoiceApp.Controllers
             {
                 return BadRequest("Null ProductID!");
             }
-            var customer = await _productApplicationService.GetByIdAsync(getProductByIdDto);
+            var result = await _productApplicationService.GetByIdAsync(getProductByIdDto);
 
-            if (!customer.IsSuccessful)
-                return BadRequest(customer.Message);
+            if (!result.IsSuccessful)
+                return BadRequest(result.Message);
 
-            var response = customer.Value;
+            var response = result.Value;
 
             return Ok(response);
         }
@@ -97,9 +104,13 @@ namespace InvoiceApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var products = await _productApplicationService.GetAllAsync();
-            return Ok(products.Value);
+            var result = await _productApplicationService.GetAllAsync();
+
+            var response = result.Value;
+
+            return Ok(response);
         } 
         #endregion
+
     }
 }
