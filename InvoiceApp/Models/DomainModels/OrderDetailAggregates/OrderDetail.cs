@@ -14,5 +14,7 @@ namespace InvoiceApp.Models.DomainModels.OrderDetailAggregates
 
         public Guid ProductID { get; set; }
         public Product Product { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

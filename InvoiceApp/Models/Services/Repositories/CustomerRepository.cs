@@ -140,7 +140,8 @@ namespace InvoiceApp.Models.Services.Repositories
                     }
                     else
                     {
-                        _context.Customers.Remove(existingCustomer);
+                        existingCustomer.IsDeleted = true;
+                        _context.Customers.Update(existingCustomer);
                         await _context.SaveChangesAsync();
                         return new Response<Customer>(
                             true,

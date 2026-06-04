@@ -11,10 +11,14 @@ BEGIN
 
         BEGIN TRANSACTION;
 
-        DELETE FROM OrderDetails
+        -- Soft delete OrderDetails
+        UPDATE OrderDetails
+        SET IsDeleted = 1
         WHERE OrderHeaderID = @OrderHeaderID;
 
-        DELETE FROM OrderHeaders
+        -- Soft delete OrderHeader
+        UPDATE OrderHeaders
+        SET IsDeleted = 1
         WHERE OrderHeaderID = @OrderHeaderID;
 
         COMMIT TRANSACTION;

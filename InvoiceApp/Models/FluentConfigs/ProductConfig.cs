@@ -11,7 +11,8 @@ namespace InvoiceApp.Models.FluentConfigs
             builder.HasKey(p=>p.ProductID);
             builder.Property(p=>p.ProductName).IsRequired().HasMaxLength(50);
             builder.Property(p=>p.UnitPrice).IsRequired();
-
+            builder.Property(p=>p.IsDeleted).IsRequired();
+            builder.HasQueryFilter(p => !p.IsDeleted);
         }
     }
 }
