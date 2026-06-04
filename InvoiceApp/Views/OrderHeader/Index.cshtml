@@ -1,0 +1,376 @@
+﻿@{
+    ViewBag.Title = "OrderHeader";
+}
+<div class="container py-5">
+
+    <div class="invoice-card bg-white p-4 rounded-4 shadow-lg border-0">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h2 class="fw-bold text-primary mb-1">
+                    Sales Invoice
+                </h2>
+
+                <small class="text-muted">
+                    Sales Management System
+                </small>
+
+            </div>
+
+            <div class="text-end">
+
+                <span class="badge bg-success fs-6 px-3 py-2">
+                    New Entry
+                </span>
+
+            </div>
+
+        </div>
+
+        <!-- Order Information -->
+        <div class="row mb-4 g-3">
+
+            <div class="col-md-4">
+
+                <label class="form-label fw-bold">
+                    Order Date
+                </label>
+
+                <input type="date"
+                       class="form-control shadow-sm"
+                       id="orderDate">
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label class="form-label fw-bold">
+                    Shipping City
+                </label>
+
+                <input type="text"
+                       class="form-control shadow-sm"
+                       id="shipCity"
+                       placeholder="e.g. New York">
+
+            </div>
+
+            <div class="col-md-4">
+
+                <label class="form-label fw-bold">
+                    Invoice Number
+                </label>
+
+                <input type="text"
+                       class="form-control shadow-sm"
+                       value="AUTO"
+                       disabled>
+
+            </div>
+
+            <div class="col-12">
+
+                <label class="form-label fw-bold">
+                    Shipping Address
+                </label>
+
+                <textarea class="form-control shadow-sm"
+                          id="shipAddress"
+                          rows="3"
+                          placeholder="Enter the full shipping address"></textarea>
+
+            </div>
+
+        </div>
+
+        <!-- Customer Selection -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+
+            <div>
+
+                <h5 class="fw-bold mb-0">
+                    Customer Information
+                </h5>
+
+            </div>
+
+            <button type="button"
+                    class="btn btn-primary px-4 shadow-sm customerSelectionBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#customerModal">
+
+                Select Customer
+
+            </button>
+
+        </div>
+
+        <!-- Customer Details -->
+        <div class="top-info-bar bg-light rounded-4 p-3 shadow-sm mb-4">
+
+            <div class="row text-center gy-3">
+
+                <div class="col-md-6">
+
+                    <div class="p-2">
+
+                        <div class="text-muted small mb-1">
+                            Buyer
+                        </div>
+
+                        <strong class="customerNameDisplay fs-5">
+                            Not Selected
+                        </strong>
+
+                    </div>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <div class="p-2">
+
+                        <div class="text-muted small mb-1">
+                            Phone Number
+                        </div>
+
+                        <strong class="customerPhoneDisplay fs-5">
+                            ---
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Product Selection -->
+        <div class="mb-4">
+
+            <button class="btn btn-success shadow-sm productSelectionBtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#selectProductModal">
+
+                Select Products / Services
+
+            </button>
+
+        </div>
+
+        <!-- Invoice Table -->
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle text-center">
+
+                <thead class="table-primary">
+
+                    <tr>
+                        <th>No.</th>
+                        <th>Product Name</th>
+                        <th>Qty</th>
+                        <th>Unit Price</th>
+                        <th>Total</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+                <tbody class="invoiceBody"></tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Amount Section -->
+        <div class="row justify-content-end mt-4">
+
+            <div class="col-md-5">
+
+                <div class="bg-light rounded-4 p-4 shadow-sm">
+
+                    <table class="table table-borderless text-center align-middle mb-0">
+
+                        <tr>
+                            <td class="fw-bold">Subtotal</td>
+                            <td id="totalPrice">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-bold">Tax</td>
+                            <td id="taxPrice">0</td>
+                        </tr>
+
+                        <tr>
+                            <td class="fw-bold">Discount</td>
+                            <td>0</td>
+                        </tr>
+
+                        <tr class="border-top">
+
+                            <td class="fw-bold text-primary fs-5">
+                                Grand Total
+                            </td>
+
+                            <td class="fw-bold text-success fs-4"
+                                id="finalPrice">
+
+                                0
+
+                            </td>
+
+                        </tr>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Buttons -->
+        <div class="mt-5 d-flex gap-3">
+
+            <button class="btn btn-primary btn-lg px-5 shadow enterData">
+                Submit Invoice
+            </button>
+
+            <button class="btn btn-outline-dark btn-lg px-5">
+                Print Invoice
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Customer Modal -->
+<div class="modal fade"
+     id="customerModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <h5 class="modal-title">
+                    Select Customer
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+
+            </div>
+
+            <div class="modal-body">
+
+                <input type="text"
+                       class="form-control mb-3"
+                       placeholder="Search customer...">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover">
+
+                        <thead>
+
+                            <tr>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Mobile</th>
+                                <th>City</th>
+                                <th>Address</th>
+                                <th>Select</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="modalTableBody">
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- Product Modal -->
+<div class="modal fade"
+     id="selectProductModal"
+     tabindex="-1"
+     aria-hidden="true">
+
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+
+        <div class="modal-content">
+
+            <div class="modal-header bg-light">
+
+                <h5 class="modal-title">
+                    Select Product / Service
+                </h5>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close">
+                </button>
+
+            </div>
+
+            <div class="modal-body">
+
+                <input type="text"
+                       class="form-control mb-3"
+                       placeholder="Search product...">
+
+                <div class="table-responsive"
+                     style="max-height:400px;">
+
+                    <table class="table table-hover align-middle text-center">
+
+                        <thead class="table-light">
+
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Action</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="modalProductTableBody"></tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="~/js/orderHeader.js"></script>

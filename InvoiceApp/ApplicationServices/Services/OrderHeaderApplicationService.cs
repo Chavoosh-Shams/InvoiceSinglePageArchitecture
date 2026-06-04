@@ -174,17 +174,9 @@ namespace InvoiceApp.ApplicationServices.Services
                         CustomerID = deleteOrderHeaderDto.CustomerID,
                         OrderDate = deleteOrderHeaderDto.OrderDate,
                         ShipCity = deleteOrderHeaderDto.ShipCity,
-                        ShipAddress = deleteOrderHeaderDto.ShipAddress,
-                        OrderDetails = deleteOrderHeaderDto.DeleteOrderDetailDtos.Select(orderDetail => new OrderDetail()
-                        {
-                            OrderDetailID = orderDetail.OrderDetailID,
-                            OrderHeaderID = orderDetail.OrderHeaderID,
-                            ProductID = orderDetail.ProductID,
-                            UnitPrice = orderDetail.UnitPrice,
-                            Quantity = orderDetail.Quantity
-                        }).ToList()
+                        ShipAddress = deleteOrderHeaderDto.ShipAddress
                     };
-                    var result = await _orderHeaderRepository.UpdateAsync(orderHeader);
+                    var result = await _orderHeaderRepository.DeleteAsync(orderHeader);
                     if (!result.IsSuccessful)
                     {
                         return new Response<DeleteOrderHeaderDto>(
@@ -219,6 +211,7 @@ namespace InvoiceApp.ApplicationServices.Services
         #region [- GetByIdAsync() -]
         public async Task<IResponse<GetOrderHeaderByIdDto>> GetByIdAsync(GetOrderHeaderByIdDto getOrderHeaderByIdDto)
         {
+          
             try
             {
                 if (getOrderHeaderByIdDto == null)
@@ -234,19 +227,7 @@ namespace InvoiceApp.ApplicationServices.Services
                 {
                     var orderHeader = new OrderHeader()
                     {
-                        OrderHeaderID = getOrderHeaderByIdDto.OrderHeaderID,
-                        CustomerID = getOrderHeaderByIdDto.CustomerID,
-                        OrderDate = getOrderHeaderByIdDto.OrderDate,
-                        ShipCity = getOrderHeaderByIdDto.ShipCity,
-                        ShipAddress = getOrderHeaderByIdDto.ShipAddress,
-                        OrderDetails = getOrderHeaderByIdDto.GetOrderDetails.Select(orderDetail => new OrderDetail()
-                        {
-                            OrderDetailID = orderDetail.OrderDetailID,
-                            OrderHeaderID = orderDetail.OrderHeaderID,
-                            ProductID = orderDetail.ProductID,
-                            UnitPrice = orderDetail.UnitPrice,
-                            Quantity = orderDetail.Quantity
-                        }).ToList()
+                        OrderHeaderID = getOrderHeaderByIdDto.OrderHeaderID
                     };
                     var customerDto = await _orderHeaderRepository.SelectByIdAsync(orderHeader);
                     if (!customerDto.IsSuccessful || customerDto.Value == null)
