@@ -179,6 +179,7 @@ namespace InvoiceApp.Models.Services.Repositories
                         .ThenInclude(od => od.Product)
                         .Include(oh => oh.Customer)
                         .SingleOrDefaultAsync(oh => oh.OrderHeaderID == orderHeader.OrderHeaderID);
+
                     if (existingOrderHeader == null)
                     {
                         return new Response<OrderHeader>(
