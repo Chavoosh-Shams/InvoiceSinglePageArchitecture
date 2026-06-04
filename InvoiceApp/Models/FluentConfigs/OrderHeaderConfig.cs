@@ -12,10 +12,12 @@ namespace InvoiceApp.Models.FluentConfigs
             builder.Property(oh=>oh.OrderDate).IsRequired();
             builder.Property(oh => oh.ShipCity).IsRequired().HasMaxLength(50);
             builder.Property(oh => oh.ShipAddress).IsRequired().HasMaxLength(200);
+            builder.Property(oh => oh.IsDeleted).IsRequired();
             builder.HasOne(oh => oh.Customer)
                 .WithMany(oh => oh.OrderHeaders)
                 .HasForeignKey(oh => oh.CustomerID)
                 .IsRequired();
+            builder.HasQueryFilter(oh => !oh.IsDeleted);
         }
     }
 }

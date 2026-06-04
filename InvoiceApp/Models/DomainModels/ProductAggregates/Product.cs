@@ -9,5 +9,7 @@ namespace InvoiceApp.Models.DomainModels.ProductAggregates
         public decimal UnitPrice { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

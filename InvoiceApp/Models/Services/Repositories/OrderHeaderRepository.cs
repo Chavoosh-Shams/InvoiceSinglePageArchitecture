@@ -134,7 +134,7 @@ namespace InvoiceApp.Models.Services.Repositories
                 {
                     var param = new SqlParameter("@OrderHeaderID", orderHeader.OrderHeaderID);
                     await _context.Database.ExecuteSqlRawAsync(
-                        "EXEC dbo.SP_DeleteOrder @OrderHeaderID",
+                        "EXEC dbo.Sp_DeleteOrder @OrderHeaderID",
                         param
                     );
                     return new Response<OrderHeader>(

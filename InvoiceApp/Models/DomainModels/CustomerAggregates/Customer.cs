@@ -12,5 +12,7 @@ namespace InvoiceApp.Models.DomainModels.CustomerAggregates
         public string Address { get; set; }
 
         public ICollection<OrderHeader> OrderHeaders { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

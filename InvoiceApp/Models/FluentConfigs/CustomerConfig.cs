@@ -14,6 +14,8 @@ namespace InvoiceApp.Models.FluentConfigs
             builder.Property(c => c.Phone).IsRequired().HasMaxLength(50);
             builder.Property(c => c.City).IsRequired().HasMaxLength(50);
             builder.Property(c => c.Address).IsRequired().HasMaxLength(200);
+            builder.Property(c => c.IsDeleted).IsRequired();
+            builder.HasQueryFilter(c => !c.IsDeleted);
         }
     }
 }

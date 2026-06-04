@@ -14,6 +14,8 @@ namespace InvoiceApp.Models.FluentConfigs
             builder.Property(od => od.UnitPrice).IsRequired();
             builder.Property(od => od.Quantity).IsRequired();
 
+            builder.Property(od => od.IsDeleted).IsRequired();
+
             builder.HasOne(od => od.OrderHeader)
                 .WithMany(od => od.OrderDetails)
                 .HasForeignKey(od => od.OrderHeaderID)
@@ -23,6 +25,7 @@ namespace InvoiceApp.Models.FluentConfigs
                 .WithMany(od => od.OrderDetails)
                 .HasForeignKey(od => od.ProductID)
                 .IsRequired();
+            builder.HasQueryFilter(od => !od.IsDeleted);
         }
     }
 }

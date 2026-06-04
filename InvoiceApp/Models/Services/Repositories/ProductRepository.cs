@@ -137,7 +137,8 @@ namespace InvoiceApp.Models.Services.Repositories
                     }
                     else
                     {
-                        _context.Products.Remove(existingProduct);
+                        existingProduct.IsDeleted = true;
+                        _context.Products.Update(existingProduct);
                         await _context.SaveChangesAsync();
                         return new Response<Product>(
                             true,
