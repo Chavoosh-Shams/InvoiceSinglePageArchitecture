@@ -221,10 +221,10 @@ namespace InvoiceApp.ApplicationServices.Services
                             UnitPrice = productDto.Value.UnitPrice,
                         };
                         return new Response<GetProductByIdDto>(
-                          true,
-                          HttpStatusCode.OK,
-                          ResponseMessages.SuccessfullOperation,
-                          responseDto);
+                            true,
+                            HttpStatusCode.OK,
+                            ResponseMessages.SuccessfullOperation,
+                            responseDto);
                     }
                 }
             }

@@ -1,19 +1,17 @@
-﻿// 
+﻿// All OrderHeaders Elems
 const invoiceTableBody = document.querySelector("#invoiceTableBody");
 const removeBtn = document.querySelector(".remove-btn");
 const customerModal = document.getElementById("customerModal");
 const productModal = document.getElementById("selectProductModal");
 const customerTableBodyElem = document.querySelector("#customerTableBody");
+
 // Update Modal
 const customerNameDisplay = document.querySelector(".customerNameDisplay");
 const customerPhoneDisplay = document.querySelector(".customerPhoneDisplay");
-
 const updateShipCityInput = document.querySelector("#updateShipCity");
 const updateShipAddressInput = document.querySelector("#updateShipAddress");
-
 const customerSelectBtn = document.querySelector(".Customer-Select-Btn");
 const productSelectBtn = document.querySelector(".Product-Select-Btn");
-
 const productsTableBodyElem = document.querySelector("#Products-Table-Body");
 const orderDetailTableBodyElem = document.querySelector(".orderDetailBody");
 const saveUpdateOrderBtn = document.querySelector("#saveUpdateOrderBtn");
@@ -32,7 +30,6 @@ let CustomerID = null;
 let selectedOrderHeader = null;
 let invoiceItems = [];
 let orderDetails = [];
-let productsCache = []; 
 
 // Base URL
 const baseUrl = "http://localhost:5013/OrderHeader";
@@ -141,7 +138,7 @@ const fetchOrderDetailsForUpdate = async (orderHeaderId) => {
 
         updateShipAddressInput.value = data.shipAddress;
 
-        customerNameDisplay.innerHTML = `${data.customerFirstName} ${data.customerFirstName}`;
+        customerNameDisplay.innerHTML = `${data.customerFirstName} ${data.customerLastName}`;
 
         customerPhoneDisplay.innerHTML = data.customerPhone;
 
@@ -156,6 +153,7 @@ const fetchOrderDetailsForUpdate = async (orderHeaderId) => {
     }
 }
 
+// Render OrderDetails
 const showOrderDetailItems = () => {
     orderDetailTableBodyElem.innerHTML=""
     orderDetails.forEach((item, index) => {
@@ -237,10 +235,7 @@ const removeInvoiceItem = (orderDetailID) => {
     showOrderDetailItems();
 }
 
-const setDeleteId = (id) => {
-    selectedId = id;
-}
-
+// Ajax: Remove OrderHeader
 const remove = async () => {
     try {
         if (!selectedId) return;
@@ -346,64 +341,89 @@ const fetchProducts = async () => {
 
 }
 
-// Show All Products
-const showProducts = products => {
+// Render Products List
+const showProducts = (products) => {
 
     productsTableBodyElem.innerHTML = "";
 
     products.forEach(product => {
 
+        const isAdded = orderDetails.some(
+            item => item.productID === product.productID
+        );
 
-        const isAlreadyAdded = orderDetails.some(item => item.productID === product.productID);
+        const rowClass = isAdded ? "table-secondary opacity-50" : "";
+        const buttonClass = isAdded
+            ? "btn btn-secondary btn-sm"
+            : "btn btn-success btn-sm";
 
+        const buttonText = isAdded
+            ? "Already Added"
+            : "Select";
 
-        const disabledAttr = isAlreadyAdded ? 'disabled' : '';
-        const buttonClass = isAlreadyAdded ? 'btn btn-secondary btn-sm' : 'btn btn-success btn-sm';
-        const buttonText = isAlreadyAdded ? 'قبلاً اضافه شده' : 'انتخاب';
+        const disabled = isAdded ? "disabled" : "";
 
-        productsTableBodyElem.insertAdjacentHTML("beforeend",
+        productsTableBodyElem.insertAdjacentHTML(
+            "beforeend",
             `
-                <tr class="${isAlreadyAdded ? 'table-secondary opacity-50' : ''}">
-                    <td>${product.productName}</td>
-                    <td>${product.unitPrice.toLocaleString()}</td>
-                    <td>
-                        <input type="number" class="form-control form-control-sm text-center productCountInput" value="1" min="1" ${disabledAttr}>
-                     
-                    <td>
-                        <button class="${buttonClass}" ${disabledAttr}
-                                onclick="if(!${isAlreadyAdded}) selectProduct(this, '${product.productID}', '${product.productName}', '${product.unitPrice}')">
-                            ${buttonText}
-                        </button>
-                    </td>
-                </tr>
+            <tr class="${rowClass}">
+                <td>${product.productName}</td>
+                <td>${Number(product.unitPrice).toLocaleString()}</td>
+                <td>
+                    <input
+                        type="number"
+                        class="form-control form-control-sm text-center productCountInput"
+                        value="1"
+                        min="1"
+                        ${disabled}
+                    >
+                </td>
+                <td>
+                    <button
+                        type="button"
+                        class="${buttonClass}"
+                        ${disabled}
+                        onclick="selectProduct(this, '${product.productID}', '${product.productName}', ${product.unitPrice})">
+                        ${buttonText}
+                    </button>
+                </td>
+            </tr>
             `
         );
     });
-}
+};
 
-// Selected Product Info
+// Add Product To Invoice
 const selectProduct = (button, productId, productName, unitPrice) => {
 
-    const isDuplicate = orderDetails.some(item => item.productID === productId);
+    // Prevent duplicate products
+    const exists = orderDetails.some(item => item.productID === productId);
 
-    if (isDuplicate) {
-        alert(`❌ محصول "${productName}" قبلاً به این فاکتور اضافه شده است!`);
+    if (exists) {
+        alert(`Product "${productName}" has already been added to this order.`);
         return;
     }
 
-    const count = button.closest("tr").querySelector(".productCountInput").value;
+    const quantityInput = button
+        .closest("tr")
+        .querySelector(".productCountInput");
 
-    const orderDetailId = crypto.randomUUID();
+    const quantity = Number(quantityInput.value);
 
-    const orderDetialObj = {
-        orderDetailID: orderDetailId,
-        productID: productId,
-        productName: productName,
-        unitPrice: Number(unitPrice),
-        quantity: Number(count),
+    if (!quantity || quantity <= 0) {
+        alert("Please enter a valid quantity.");
+        return;
     }
 
-    orderDetails.push(orderDetialObj);
+    const orderDetail = {
+        orderDetailID: crypto.randomUUID(),
+        productID: productId,
+        productName,
+        unitPrice: Number(unitPrice),
+        quantity
+    };
+
+    orderDetails.push(orderDetail);
 
     showOrderDetailItems();
 }
@@ -416,17 +436,17 @@ const update = async () => {
         const orderDateValue = document.querySelector("#orderDate").value;
 
         if (!orderDateValue) {
-            alert("تاریخ انتخاب نشده");
+            alert("Please select an order date.");
             return;
         }
 
         if (!CustomerID) {
-            alert("مشتری انتخاب نشده");
+            alert("Please select a customer.");
             return;
         }
 
         if (orderDetails.length === 0) {
-            alert("حداقل یک محصول انتخاب کنید");
+            alert("At least one product must be selected.");
             return;
         }
 
@@ -460,21 +480,22 @@ const update = async () => {
 
         if (response.ok) {
 
-            alert("سفارش با موفقیت ثبت شد");
+            alert("Order updated successfully.");
+
+            const modalElement = document.getElementById("updateModal");
+            const modal = bootstrap.Modal.getInstance(modalElement);
+            modal.hide();
 
             orderDetails = [];
-
             CustomerID = null;
 
             customerNameDisplay.innerHTML = "";
-
             customerPhoneDisplay.innerHTML = "";
 
             updateShipCityInput.value = "";
-
             updateShipAddressInput.value = "";
 
-            showOrderDetailItems();
+            fetchOrderHeader();
 
         }
 
@@ -482,10 +503,26 @@ const update = async () => {
 
         console.error(err);
 
-        alert("خطا در ثبت سفارش");
+        alert("Error while registering the order.");
 
     }
 }
+
+// Set ID
+const setDeleteId = id => {
+    selectedId = id;
+}
+
+// Open Modasl On The Another Modal
+$(document).on('click', '#updateModal .Customer-Select-Btn', function () {
+    const customerModal = new bootstrap.Modal('#customerModal');
+    customerModal.show();
+});
+
+$(document).on('click', '#updateModal .Product-Select-Btn', function () {
+    const productModal = new bootstrap.Modal('#selectProductModal');
+    productModal.show();
+});
 
 // Event Listeners
 window.addEventListener("load", fetchOrderHeader);
@@ -493,11 +530,3 @@ customerSelectBtn.addEventListener("click", fetchCustomers);
 productSelectBtn.addEventListener("click", fetchProducts);
 saveUpdateOrderBtn.addEventListener("click", update);
 removeBtn.addEventListener("click", remove);
-$(document).on('click', '#updateModal .Customer-Select-Btn', function () {
-    const customerModal = new bootstrap.Modal('#customerModal');
-    customerModal.show();
-});
-$(document).on('click', '#updateModal .Product-Select-Btn', function () {
-    const productModal = new bootstrap.Modal('#selectProductModal');
-    productModal.show();
-});

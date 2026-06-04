@@ -37,7 +37,9 @@ namespace InvoiceApp.Controllers
             if (!result.IsSuccessful)
                 return BadRequest(result.Message);
 
-            return Ok(result.Value);
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
 
@@ -53,7 +55,9 @@ namespace InvoiceApp.Controllers
             if (!result.IsSuccessful)
                 return BadRequest(result.Message);
 
-            return Ok(result.Value);
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
 
@@ -71,7 +75,9 @@ namespace InvoiceApp.Controllers
             if (!result.IsSuccessful)
                 return BadRequest(result.Message);
 
-            return Ok(result.Value);
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
 
@@ -85,12 +91,12 @@ namespace InvoiceApp.Controllers
                 return BadRequest("Null OrderHeaderID");
             }
 
-            var customer = await _orderHeaderApplicationService.GetByIdAsync(getOrderHeaderByIdDto);
+            var result = await _orderHeaderApplicationService.GetByIdAsync(getOrderHeaderByIdDto);
 
-            if (!customer.IsSuccessful)
-                return BadRequest(customer.Message);
+            if (!result.IsSuccessful)
+                return BadRequest(result.Message);
 
-            var response = customer.Value;
+            var response = result.Value;
 
             return Ok(response);
         }
@@ -100,9 +106,13 @@ namespace InvoiceApp.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var customers = await _orderHeaderApplicationService.GetAllAsync();
-            return Ok(customers.Value);
+            var result = await _orderHeaderApplicationService.GetAllAsync();
+
+            var response = result.Value;
+
+            return Ok(response);
         }
         #endregion
+
     }
 }

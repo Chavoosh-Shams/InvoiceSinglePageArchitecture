@@ -1,5 +1,5 @@
-using System.Diagnostics;
 using InvoiceApp.Models;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvoiceApp.Controllers

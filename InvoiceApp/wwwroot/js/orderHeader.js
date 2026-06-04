@@ -1,16 +1,16 @@
-﻿// Create OrderHeader
+﻿// Create Modal Elements 
 const sendData = document.querySelector(".enterData");
 const shipCity = document.querySelector("#shipCity");
 const shipAddress = document.querySelector("#shipAddress");
 
 // Select Customer Modal
-const productList = document.getElementById("modalProductTableBody");
+const productsTableBodyElem = document.querySelector("#modalProductTableBody");
 const customerNameDisplay = document.querySelector(".customerNameDisplay");
 const customerPhoneDisplay = document.querySelector(".customerPhoneDisplay");
 const customerSelectionBtn = document.querySelector(".customerSelectionBtn");
 
 // Select Product Modal
-const modalTableBody = document.getElementById("modalTableBody");
+const modalTableBody = document.querySelector("#modalTableBody");
 const productNameField = document.querySelector(".productNameField");
 const productCountField = document.querySelector(".productCountField");
 const productUnitPriceField = document.querySelector(".productUnitPriceField");
@@ -23,7 +23,6 @@ const invoiceBody = document.querySelector(".invoiceBody");
 let selectedId = null;
 let CustomerID = null;
 let orderDetails = [];
-let productsCache = []; 
 
 // Base URL
 const baseUrl = "http://localhost:5013";
@@ -85,7 +84,7 @@ const selectCustomer = (customerId, firstName, lastName, phone) => {
     const modalElement = document.getElementById('customerModal');
     const modal = bootstrap.Modal.getInstance(modalElement);
     modal.hide();
-};
+}
 
 // Ajax : Fetch All Products 
 const fetchProducts = async () => {
@@ -95,8 +94,6 @@ const fetchProducts = async () => {
         const response = await fetch(`${baseUrl}/Product/GetAll`);
 
         const data = await response.json();
-
-        productsCache = data;
 
         showProducts(data);
 
@@ -108,7 +105,7 @@ const fetchProducts = async () => {
 
 }
 
-
+// Render Order Details
 const showOrderDetailItems = () => {
 
     invoiceBody.innerHTML = "";
@@ -153,72 +150,97 @@ const showOrderDetailItems = () => {
 
     document.querySelector("#finalPrice").textContent =
         finalPrice.toLocaleString();
-};
+}
 
-// Show All Products
+// Render Products List
 const showProducts = products => {
 
-    productList.innerHTML = "";
+    productsTableBodyElem.innerHTML = "";
 
     products.forEach(product => {
 
-     
-        const isAlreadyAdded = orderDetails.some(item => item.productID === product.productID);
+        const isAdded = orderDetails.some(
+            item => item.productID === product.productID
+        );
 
-       
-        const disabledAttr = isAlreadyAdded ? 'disabled' : '';
-        const buttonClass = isAlreadyAdded ? 'btn btn-secondary btn-sm' : 'btn btn-success btn-sm';
-        const buttonText = isAlreadyAdded ? 'قبلاً اضافه شده' : 'انتخاب';
+        const rowClass = isAdded ? "table-secondary opacity-50" : "";
+        const buttonClass = isAdded
+            ? "btn btn-secondary btn-sm"
+            : "btn btn-success btn-sm";
 
-        productList.insertAdjacentHTML("beforeend",
+        const buttonText = isAdded
+            ? "Already Added"
+            : "Select";
+
+        const disabled = isAdded ? "disabled" : "";
+
+        productsTableBodyElem.insertAdjacentHTML(
+            "beforeend",
             `
-                <tr class="${isAlreadyAdded ? 'table-secondary opacity-50' : ''}">
-                    <td>${product.productName}</td>
-                    <td>${product.unitPrice.toLocaleString()}</td>
-                    <td>
-                        <input type="number" class="form-control form-control-sm text-center productCountInput" value="1" min="1" ${disabledAttr}>
-                     
-                    <td>
-                        <button class="${buttonClass}" ${disabledAttr}
-                                onclick="if(!${isAlreadyAdded}) selectProduct(this, '${product.productID}', '${product.productName}', '${product.unitPrice}')">
-                            ${buttonText}
-                        </button>
-                    </td>
-                </tr>
+            <tr class="${rowClass}">
+                <td>${product.productName}</td>
+                <td>${Number(product.unitPrice).toLocaleString()}</td>
+                <td>
+                    <input
+                        type="number"
+                        class="form-control form-control-sm text-center productCountInput"
+                        value="1"
+                        min="1"
+                        ${disabled}
+                    >
+                </td>
+                <td>
+                    <button
+                        type="button"
+                        class="${buttonClass}"
+                        ${disabled}
+                        onclick="selectProduct(this, '${product.productID}', '${product.productName}', ${product.unitPrice})">
+                        ${buttonText}
+                    </button>
+                </td>
+            </tr>
             `
         );
     });
-};
+}
 
-// Selected Product Info
+// Add Product To Invoice
 const selectProduct = (button, productId, productName, unitPrice) => {
-    
-    const isDuplicate = orderDetails.some(item => item.productID === productId);
 
-    if (isDuplicate) {
-        alert(`❌ محصول "${productName}" قبلاً به این فاکتور اضافه شده است!`);
-        return; 
+    // Prevent duplicate products
+    const exists = orderDetails.some(item => item.productID === productId);
+
+    if (exists) {
+        alert(`Product "${productName}" has already been added to this order.`);
+        return;
     }
 
-    const count = button.closest("tr").querySelector(".productCountInput").value;
+    const quantityInput = button
+        .closest("tr")
+        .querySelector(".productCountInput");
 
-    const orderDetailId = crypto.randomUUID();
+    const quantity = Number(quantityInput.value);
 
-    const orderDetialObj = {
-        orderDetailID: orderDetailId,
+    if (!quantity || quantity <= 0) {
+        alert("Please enter a valid quantity.");
+        return;
+    }
+
+    const orderDetail = {
+        orderDetailID: crypto.randomUUID(),
         productID: productId,
-        productName: productName,
+        productName,
         unitPrice: Number(unitPrice),
-        quantity: Number(count),
-    }
+        quantity
+    };
 
-    orderDetails.push(orderDetialObj);
+    orderDetails.push(orderDetail);
 
     showOrderDetailItems();
 }
 
 // RemoveOrderDetail
-const removeInvoiceItem = (orderDetailID) => {
+const removeInvoiceItem = orderDetailID => {
 
     const index = orderDetails.findIndex(orderDetail => orderDetail.orderDetailID === orderDetailID);
     if (index !== -1) {
@@ -234,18 +256,19 @@ const create = async () => {
 
         const orderDateValue = document.querySelector("#orderDate").value;
 
+
         if (!orderDateValue) {
-            alert("تاریخ انتخاب نشده");
+            alert("Please select an order date.");
             return;
         }
 
         if (!CustomerID) {
-            alert("مشتری انتخاب نشده");
+            alert("Please select a customer.");
             return;
         }
 
         if (orderDetails.length === 0) {
-            alert("حداقل یک محصول انتخاب کنید");
+            alert("At least one product must be selected.");
             return;
         }
 
@@ -280,21 +303,33 @@ const create = async () => {
         console.log("RESPONSE:", text);
 
         if (response.ok) {
-            alert("سفارش با موفقیت ثبت شد");
+
+            alert("Order updated successfully.");
+
             orderDetails = [];
+
             CustomerID = null;
+
             customerNameDisplay.innerHTML = "";
+
             customerPhoneDisplay.innerHTML = "";
+
             shipCity.value = "";
+
             shipAddress.value = "";
+
             showOrderDetailItems();
+
         }
 
     } catch (err) {
+
         console.error(err);
-        alert("خطا در ثبت سفارش");
+
+        alert("Error while registering the order.");
+
     }
-};
+}
 
 const btnOpenModal = document.querySelector('[data-bs-target="#customerModal"]');
 btnOpenModal.addEventListener('click', () => {
@@ -306,6 +341,7 @@ btnOpenProductModal.addEventListener('click', () => {
     fetchProducts(); 
 });
 
+// Event Listeners
 sendData.addEventListener("click", create);
 customerSelectionBtn.addEventListener("click", fetchCustomers);
 productSelectionBtn.addEventListener("click", fetchProducts);
