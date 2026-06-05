@@ -37,7 +37,7 @@ let selectedId = null;
 // Base URL for AJAX Fetch Requests
 const baseUrl = "http://localhost:5013/Customer";
 
-// Ajax : Fetch All Customers 
+// Ajax : Get All
 const fetchCustomers = async () => {
 
     try {
@@ -223,7 +223,7 @@ const remove = async () => {
     catch (error) {
         console.error(error);
     }
-};
+}
 
 // Ajax : Get By Id
 const showDetail = async (customerID) => {
@@ -289,14 +289,14 @@ const validationInput = (firstName, lastName, phone, city, address) => {
     if (!firstName || !lastName || !phone || !city || !address) {
         return {
             isValid: false,
-            message: "تمامی فیلدها (نام، نام خانوادگی، تلفن، شهر، آدرس) الزامی هستند"
+            message: "All fields (first name, last name, phone, city, address) are required"
         };
     }
 
     if (firstName.length < 2 || lastName.length < 2) {
         return {
             isValid: false,
-            message: "نام و نام خانوادگی باید حداقل ۲ کاراکتر باشند"
+            message: "First and last name must be at least 2 characters"
         };
     }
 
@@ -304,34 +304,34 @@ const validationInput = (firstName, lastName, phone, city, address) => {
     if (!nameRegex.test(firstName) || !nameRegex.test(lastName)) {
         return {
             isValid: false,
-            message: "فقط حروف فارسی/انگلیسی و فاصله برای نام و نام خانوادگی مجاز هستند"
+            message: "Only Persian/English letters and spaces are allowed for first and last names"
         };
     }
 
     if (city.length < 2) {
         return {
             isValid: false,
-            message: "نام شهر باید حداقل ۲ کاراکتر باشد"
+            message: "City name must be at least 2 characters"
         };
     }
     if (!cityRegex.test(city)) {
         return {
             isValid: false,
-            message: "نام شهر فقط می‌تواند شامل حروف فارسی/انگلیسی و فاصله باشد"
+            message: "City names can only contain Persian/English letters and spaces"
         };
     }
 
     if (!phoneRegex.test(phone)) {
         return {
             isValid: false,
-            message: "شماره تلفن معتبر نیست (مثال صحیح: 09121234567 یا +989121234567)"
+            message: "The phone number is not valid (correct example: 09121234567 or +989121234567)"
         };
     }
 
     if (address.length < 5) {
         return {
             isValid: false,
-            message: "آدرس باید حداقل ۵ کاراکتر باشد"
+            message: "Address must be at least 5 characters"
         };
     }
 

@@ -1,8 +1,8 @@
-﻿// All OrderHeaders Elems
+﻿// OrderHeaders Elems
 const invoiceTableBody = document.querySelector("#invoiceTableBody");
 const removeBtn = document.querySelector(".remove-btn");
-const customerModal = document.getElementById("customerModal");
-const productModal = document.getElementById("selectProductModal");
+const customerModal = document.querySelector("#customerModal");
+const productModal = document.querySelector("#selectProductModal");
 const customerTableBodyElem = document.querySelector("#customerTableBody");
 
 // Update Modal
@@ -43,7 +43,7 @@ const fetchOrderHeader = async () => {
 
         const data = await res.json();
 
-        renderOrders(data);
+        showOrderHeaders(data);
 
     } catch (err) {
 
@@ -53,71 +53,69 @@ const fetchOrderHeader = async () => {
 }
 
 // Render All OrderHeaders 
-const renderOrders = (orders) => {
+const showOrderHeaders = (orders) => {
+
     invoiceTableBody.innerHTML = "";
 
     orders.forEach((o, index) => {
+
         invoiceTableBody.insertAdjacentHTML("beforeend",
+
             `
-            <tr>
-                <td>${index + 1}</td>
-                <td><span class="badge bg-dark">${o.orderHeaderID}</span></td>
-                <td>${o.customerFirstName} ${o.customerLastName}</td>
-                <td>${o.orderDate}</td>
-                <td>${o.shipCity}</td>
-                <td>${o.shipAddress}</td>
-                <td>
-
-                    <button class="btn btn-info btn-sm text-white"
-                        data-bs-toggle="modal"
-                        data-bs-target="#infoModal"
-                        onclick="openInfoModal('${o.orderHeaderID}')">
-                        Info
-                    </button>
-
-                    <button class="btn btn-warning btn-sm text-white"
-                        data-bs-toggle="modal"
-                        data-bs-target="#updateModal"
-                        onclick="openUpdateModal('${o.orderHeaderID}')">
-                        Edite
-                    </button>
-
-                    <button class="btn btn-danger btn-sm"
-                        data-bs-toggle="modal"
-                        data-bs-target="#deleteModal"
-                        onclick="setDeleteId('${o.orderHeaderID}')">
-                        Delete
-                    </button>
-
-                </td>
-            </tr>
-        `
+                <tr>
+                     <td>${index + 1}</td>
+                     <td><span class="badge bg-dark">${o.orderHeaderID}</span></td>
+                     <td>${o.customerFirstName} ${o.customerLastName}</td>
+                     <td>${o.orderDate}</td>
+                     <td>${o.shipCity}</td>
+                     <td>${o.shipAddress}</td>
+                     <td>
+                         <button class="btn btn-info btn-sm text-white"
+                             data-bs-toggle="modal"
+                             data-bs-target="#infoModal"
+                             onclick="openInfoModal('${o.orderHeaderID}')">
+                             Info
+                         </button>
+            
+                         <button class="btn btn-warning btn-sm text-white"
+                             data-bs-toggle="modal"
+                             data-bs-target="#updateModal"
+                             onclick="openUpdateModal('${o.orderHeaderID}')">
+                             Edite
+                         </button>
+            
+                         <button class="btn btn-danger btn-sm"
+                             data-bs-toggle="modal"
+                             data-bs-target="#deleteModal"
+                             onclick="setDeleteId('${o.orderHeaderID}')">
+                             Delete
+                         </button>
+                     </td>
+                 </tr>
+            `
         );
+
     });
-}
 
-// Open Update Modal
-const openUpdateModal = async (orderHeaderId) => {
-    selectedOrderHeader = orderHeaderId
-    await fetchOrderDetailsForUpdate(orderHeaderId);
 }
-
-// Open Info Modal
-const openInfoModal = async (orderHeaderId) => {
-    await fetchOrderHeaderForInfo(orderHeaderId);
-};
 
 // Ajax : Fetch OrderDetails By OrderHeader
 const fetchOrderDetailsForUpdate = async (orderHeaderId) => {
+
     try {
+
         orderDetails = [];
+
         const url = `${baseUrl}/GetById?orderHeaderID=${orderHeaderId}`;
 
         const res = await fetch(url);
 
         if (!res.ok) {
+
             console.error("HTTP ERROR:", res.status);
+
             return;
+
         }
 
         const data = await res.json();
@@ -127,7 +125,9 @@ const fetchOrderDetailsForUpdate = async (orderHeaderId) => {
         invoiceItems = data.getOrderDetails;
 
         invoiceItems.forEach(invoice => {
-            orderDetails.push(invoice)
+
+            orderDetails.push(invoice);
+
         })
 
         console.log(orderDetails);
@@ -151,33 +151,42 @@ const fetchOrderDetailsForUpdate = async (orderHeaderId) => {
         console.error("OrderDetail Error:", err);
 
     }
+
 }
 
 // Render OrderDetails
 const showOrderDetailItems = () => {
-    orderDetailTableBodyElem.innerHTML=""
+
+    orderDetailTableBodyElem.innerHTML = "";
+
     orderDetails.forEach((item, index) => {
-        console.log(item.productName)
+
+        const totalPrice = item.unitPrice * item.quantity;
+
         orderDetailTableBodyElem.insertAdjacentHTML("beforeend",
+
             `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${item.productName}</td>
-                <td>${item.quantity}</td>
-                <td>${item.unitPrice.toLocaleString()}</td>
-                <td>${item.unitPrice.toLocaleString()}</td>
+                <tr>
+                    <td>${index + 1}</td>
+                    <td>${item.productName}</td>
+                    <td>${item.quantity}</td>
+                    <td>${item.unitPrice.toLocaleString()}</td>
+                    <td>${totalPrice.toLocaleString()}</td>
                
-                <td>
-                    <button
-                        class="btn btn-danger btn-sm"
-                        onclick="removeInvoiceItem('${item.orderDetailID}')">
-                        Delete
-                    </button>
-                </td>
-            </tr>
+                    <td>
+                        <button
+                            class="btn btn-danger btn-sm"
+                            onclick="removeInvoiceItem('${item.orderDetailID}')">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
             `
+
         );
+
     });
+
 }
 
 // Ajax : Fetch fetchOrderHeaderForInfo By OrderHeader
@@ -226,7 +235,7 @@ const fetchOrderHeaderForInfo = async (orderHeaderId) => {
 }
 
 // RemoveOrderDetail
-const removeInvoiceItem = (orderDetailID) => {
+const removeInvoiceItem = orderDetailID => {
 
     const index = orderDetails.findIndex(orderDetail => orderDetail.orderDetailID === orderDetailID);
     if (index !== -1) {
@@ -237,7 +246,9 @@ const removeInvoiceItem = (orderDetailID) => {
 
 // Ajax: Remove OrderHeader
 const remove = async () => {
+
     try {
+
         if (!selectedId) return;
 
         const res = await fetch(`${baseUrl}/Delete`, {
@@ -247,13 +258,19 @@ const remove = async () => {
         });
 
         if (res.ok) {
+
             bootstrap.Modal.getInstance(document.getElementById("deleteModal")).hide();
+
             fetchOrderHeader();
+
         }
     } catch (err) {
+
         console.error(err);
+
     }
-};
+
+}
 
 // Ajax : Fetch All Customers For Selecting In Updateing Order And Order Detail 
 const fetchCustomers = async () => {
@@ -271,7 +288,7 @@ const fetchCustomers = async () => {
         console.error(err);
 
     }
-};
+}
 
 // Render All Customers
 const showCustomers = customers => {
@@ -297,7 +314,8 @@ const showCustomers = customers => {
                         </button>
                     </td>
                 </tr>
-            `);
+            `
+            );
 
         });
 
@@ -506,6 +524,22 @@ const update = async () => {
         alert("Error while registering the order.");
 
     }
+}
+
+// Open Update Modal
+const openUpdateModal = async (orderHeaderId) => {
+
+    selectedOrderHeader = orderHeaderId;
+
+    await fetchOrderDetailsForUpdate(orderHeaderId);
+
+}
+
+// Open Info Modal
+const openInfoModal = async (orderHeaderId) => {
+
+    await fetchOrderHeaderForInfo(orderHeaderId);
+
 }
 
 // Set ID

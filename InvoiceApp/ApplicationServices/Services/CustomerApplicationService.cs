@@ -2,8 +2,8 @@
 using InvoiceApp.Models.Services.Contracts;
 using InvoiceApp.Frameworks.ResponseFrameworks;
 using InvoiceApp.ApplicationServices.Dtos.CustomerDtos;
-using InvoiceApp.Models.DomainModels.CustomerAggregates;
 using InvoiceApp.ApplicationServices.Services.Contracts;
+using InvoiceApp.Models.DomainModels.CustomerAggregates;
 using InvoiceApp.Frameworks.ResponseFrameworks.Contracts;
 
 namespace InvoiceApp.ApplicationServices.Services

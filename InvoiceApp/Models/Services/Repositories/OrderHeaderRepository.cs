@@ -12,7 +12,6 @@ namespace InvoiceApp.Models.Services.Repositories
 {
     public class OrderHeaderRepository : IOrderHeaderRepository
     {
-
         #region [- PrivateField -]
         private readonly ProjectDbContext _context;
         #endregion
@@ -178,6 +177,7 @@ namespace InvoiceApp.Models.Services.Repositories
                         .Include(oh => oh.OrderDetails)
                         .ThenInclude(od => od.Product)
                         .Include(oh => oh.Customer)
+                        .IgnoreQueryFilters()
                         .SingleOrDefaultAsync(oh => oh.OrderHeaderID == orderHeader.OrderHeaderID);
 
                     if (existingOrderHeader == null)
@@ -220,6 +220,7 @@ namespace InvoiceApp.Models.Services.Repositories
                 var orderHeaders = await _context.OrderHeaders
                     .AsNoTracking()
                     .Include(oh => oh.Customer)
+                    .IgnoreQueryFilters()
                     .ToListAsync();
                 return new Response<IEnumerable<OrderHeader>>(
                     true,
@@ -239,6 +240,5 @@ namespace InvoiceApp.Models.Services.Repositories
             }
         } 
         #endregion
-
     }
 }

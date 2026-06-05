@@ -27,7 +27,7 @@ let orderDetails = [];
 // Base URL
 const baseUrl = "http://localhost:5013";
 
-// Ajax : Fetch All Customers 
+// Ajax : Get All Customers
 const fetchCustomers = async () => {
 
     try {
@@ -86,7 +86,7 @@ const selectCustomer = (customerId, firstName, lastName, phone) => {
     modal.hide();
 }
 
-// Ajax : Fetch All Products 
+// Ajax : Get All Products
 const fetchProducts = async () => {
 
     try {
