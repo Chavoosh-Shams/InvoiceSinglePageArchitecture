@@ -6,7 +6,6 @@ namespace InvoiceApp.Controllers
 {
     public class CustomerController : Controller
     {
-
         #region [- PrivateField -]
         private readonly ICustomerApplicationService _customerApplicationService;
         #endregion
@@ -111,6 +110,5 @@ namespace InvoiceApp.Controllers
             return Ok(response);
         } 
         #endregion
-
     }
 }

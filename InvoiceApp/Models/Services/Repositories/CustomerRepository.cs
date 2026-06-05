@@ -9,7 +9,6 @@ namespace InvoiceApp.Models.Services.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-
         #region [- PrivateField -]
         private readonly ProjectDbContext _context;
         #endregion
@@ -239,6 +238,5 @@ namespace InvoiceApp.Models.Services.Repositories
             }
         } 
         #endregion
-
     }
 }

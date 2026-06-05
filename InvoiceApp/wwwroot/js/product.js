@@ -28,7 +28,7 @@ let selectedId = null;
 // Base URL for AJAX Fetch Requests
 const baseUrl = "http://localhost:5013/Product";
 
-// Ajax : Fetch All products 
+// Ajax : Get All
 const fetchProducts = async () => {
 
     try {
@@ -44,6 +44,7 @@ const fetchProducts = async () => {
         console.error(error);
 
     }
+
 }
 
 // Render Last Three products
@@ -71,7 +72,7 @@ const showProducts = products => {
             `
         );
 
-    })
+    });
 }
 
 // Ajax : Create 
@@ -89,11 +90,8 @@ const create = async () => {
             return;
         }
 
-        // Generate a unique GUID
-        const id = crypto.randomUUID();
-
         const newProduct = {
-            productID: id,
+            productID: crypto.randomUUID(),
             productName: productNameInput.value.trim(),
             unitPrice: unitPriceInput.value.trim(),
         };
@@ -108,17 +106,25 @@ const create = async () => {
         });
 
         if (response.ok) {
+
             const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById("createModal"));
+
             modal.hide();
+
             fetchProducts();
+
         } else {
+
             throw new Error("Request failed");
+
         }
 
         inputCleaner();
 
     } catch (error) {
+
         console.error(error);
+
     }
 
 }
@@ -154,11 +160,17 @@ const update = async () => {
         });
 
         if (response.ok) {
+
             const modal = bootstrap.Modal.getOrCreateInstance(document.getElementById("updateModal"));
+
             modal.hide();
+
             fetchProducts();
+
         } else {
+
             throw new Error("Request failed");
+
         }
 
     } catch (error) {
@@ -166,12 +178,14 @@ const update = async () => {
         console.error(error);
 
     }
+
 }
 
 // Ajax : Remove
 const remove = async () => {
 
     try {
+
         const response = await fetch(`${baseUrl}/Delete`, {
             method: "DELETE",
             headers: {
@@ -180,33 +194,43 @@ const remove = async () => {
             },
             body: JSON.stringify({
                 productID: selectedId
-            }),
+            })
         });
 
         if (response.ok) {
 
             const modalElement = document.getElementById("deleteModal");
+
             const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
+
             modal.hide();
+
             fetchProducts();
 
         }
+
     }
     catch (error) {
+
         console.error(error);
+
     }
+
 }
 
 // Ajax : Get By Id
 const showDetail = async (productID) => {
 
     try {
+
         const response = await fetch(`${baseUrl}/GetById?productID=${productID}`);
 
         const product = await response.json();
 
         detailId.innerHTML = product.productID;
+
         detailProductName.innerHTML = product.productName;
+
         detailUnitPrice.innerHTML = product.unitPrice;
 
     } catch (error) {
@@ -214,6 +238,7 @@ const showDetail = async (productID) => {
         console.error(error);
 
     }
+
 }
 
 // Functions: Save ID for Edit or Remove
@@ -230,8 +255,11 @@ const populateUpdateModal = (productId, productName, unitPrice) => {
 
 // Functions: Clear Form Inputs 
 const inputCleaner = () => {
+
     productNameInput.value = "";
+
     unitPriceInput.value = "";
+
 }
 
 // Validation for Product
@@ -247,42 +275,42 @@ const validateProduct = (productName, unitPrice) => {
     if (!productName || unitPrice === undefined || unitPrice === null || unitPrice === "") {
         return {
             isValid: false,
-            message: "نام محصول و قیمت واحد الزامی هستند"
+            message: "Product name and unit price are required"
         };
     }
 
     if (productName.length < 3) {
         return {
             isValid: false,
-            message: "نام محصول باید حداقل ۳ کاراکتر باشد"
+            message: "Product name must be at least 3 characters"
         };
     }
 
     if (!nameRegex.test(productName)) {
         return {
             isValid: false,
-            message: "نام محصول فقط می‌تواند شامل حروف و اعداد باشد"
+            message: "Product names can only contain letters and numbers"
         };
     }
 
     if (isNaN(priceValue)) {
         return {
             isValid: false,
-            message: "قیمت واحد باید یک عدد معتبر باشد"
+            message: "Unit price must be a valid number"
         };
     }
 
     if (priceValue <= 0) {
         return {
             isValid: false,
-            message: "قیمت واحد باید بزرگتر از صفر باشد"
+            message: "Unit price must be greater than zero"
         };
     }
 
     return {
         isValid: true
     };
-};
+}
 
 // Event Listeners
 window.addEventListener("load", fetchProducts);

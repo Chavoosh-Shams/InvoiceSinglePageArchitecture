@@ -10,7 +10,6 @@ namespace InvoiceApp.ApplicationServices.Services
 {
     public class ProductApplicationService : IProductApplicationService
     {
-
         #region [- PrivateFields -]
         private readonly IProductRepository _productRepository;
         #endregion
@@ -281,6 +280,5 @@ namespace InvoiceApp.ApplicationServices.Services
             }
         } 
         #endregion
-
     }
 }

@@ -12,7 +12,6 @@ namespace InvoiceApp.ApplicationServices.Services
 {
     public class OrderHeaderApplicationService : IOrderHeaderApplicationService
     {
-
         #region [- Private Field -]
         private readonly IOrderHeaderRepository _orderHeaderRepository;
         #endregion
@@ -330,6 +329,5 @@ namespace InvoiceApp.ApplicationServices.Services
             }
         }
         #endregion
-
     }
 }
