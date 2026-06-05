@@ -12,7 +12,7 @@ A clean architecture invoice management system with Domain-Driven Design (DDD), 
 - ✅ **Code First Approach** with EF Core
 - ✅ **Fluent API** for entity configurations (relationships, constraints, indexes)
 - ✅ **Repository Pattern** for data access abstraction
-- ✅ **Stored Procedures** for complex N-to-N transactions (INSERT, UPDATE, DELETE on master-detail) with sending JSON to Database and run SP
+- ✅ **Stored Procedures** for complex N-to-N transactions (INSERT, UPDATE, DELETE on master-detail) with sending JSON to Database run SP
 - ✅ **Pure JavaScript AJAX** (XMLHttpRequest) for API calls - Single Page Architecture -no page refresh 
 - ✅ **JavaScript Proxy Pattern** to intercept and manage all API requests (logging, error handling, auth)
 - ✅ **ASP.NET Core** with Swagger documentation
