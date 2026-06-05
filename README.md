@@ -20,8 +20,8 @@ A clean architecture invoice management system with Domain-Driven Design (DDD), 
 
 | Layer               | Technology                                 |
 |---------------------|--------------------------------------------|
-| Backend API         | ASP.NET Core 9                     |
-| Database Access     | ADO.NET with Stored Procedures             |
+| Backend API         | ASP.NET Core 9                             |
+| Database Access     | Stored Procedures                          |
 | Architecture        | Clean Architecture + DDD                   |
 | Client-Side         | HTML5, CSS3, Vanilla JavaScript            |
 | API Communication   | AJAX (XMLHttpRequest) + Custom Proxy       |
